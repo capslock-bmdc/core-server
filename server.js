@@ -6,7 +6,6 @@ if(process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const favicon = require('serve-favicon');
 const app = express();
-const expressLayout = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const userParser = require('./middlewares/user-parser');
@@ -14,6 +13,7 @@ const userParser = require('./middlewares/user-parser');
 
 /* Import Routers */
 const indexRouter = require('./routes/index.js');
+const userRouter = require('./routes/user.js');
 const loginRouter = require('./routes/login.js');
 const authRouter = require('./routes/auth/auth.js');
 
@@ -29,7 +29,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(expressLayout);
 app.use(express.static('public'));
 app.use(favicon(__dirname + '/public/images/favicon.png'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,6 +50,7 @@ db.once('open', () => {console.log('Mongoose is connected');});
 
 /* Middlewares */
 app.use('/', indexRouter);
+app.use('/user', userRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 
