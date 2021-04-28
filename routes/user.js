@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const isAdmin = require('./auth/isAdmin');
 const adminOnly = require('./auth/adminOnly');
@@ -28,8 +29,10 @@ router.post('/', async (req, res) => {
 
     try {
         const savedUser = await user.save();
+        console.log(savedUser)
         //Create and assign a jwt token
-        const token = jwt.sign({id: user._id}, process.env.TOKEN_SECRET);
+        const token = jwt.sign({userId: user._id}, process.env.TOKEN_SECRET);
+        console.log(token)
         return res.status(200).json({token, user: savedUser});
     } catch(err) {
         return res.status(400).send(err);
