@@ -12,7 +12,6 @@ router.get('/', async (req, res) => {
     return res.json(users);
 });
 
-
 router.post('/', async (req, res) => {
     const tzExist = await User.findOne({tz: req.body.tz});
 
@@ -29,11 +28,18 @@ router.post('/', async (req, res) => {
 
     try {
         const savedUser = await user.save();
-        console.log(savedUser)
         //Create and assign a jwt token
         const token = jwt.sign({userId: user._id}, process.env.TOKEN_SECRET);
-        console.log(token)
         return res.status(200).json({token, user: savedUser});
+    } catch(err) {
+        return res.status(400).send(err);
+    }
+});
+
+router.get('/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        return res.status(200).json(user);
     } catch(err) {
         return res.status(400).send(err);
     }

@@ -14,6 +14,7 @@ const userParser = require('./middlewares/user-parser');
 /* Import Routers */
 const indexRouter = require('./routes/index.js');
 const userRouter = require('./routes/user.js');
+const appRouter = require('./routes/app.js');
 const loginRouter = require('./routes/login.js');
 const authRouter = require('./routes/auth/auth.js');
 
@@ -50,7 +51,8 @@ db.once('open', () => {console.log('Mongoose is connected');});
 
 /* Middlewares */
 app.use('/', indexRouter);
-app.use('/user', userRouter);
+app.use('/users', userRouter);
+app.use('/apps', appRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 
