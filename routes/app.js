@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
     const nameExist = await App.findOne({name: req.body.name});
 
     if(nameExist) {
-        return res.status(400).send('App name already exist');
+        return res.status(400).json({status:"error", message: 'App name already exist'});
     }
 
     const app = new App({
@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
         const savedApp = await app.save();
         return res.status(200).json(savedApp);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
         const app = await App.findById(req.params.id);
         return res.status(200).json(app);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -47,7 +47,7 @@ router.put('/:id', async (req, res) => {
         const app = await App.findByIdAndUpdate({_id: req.params.id}, updatedApp, {new: true});
         return res.status(200).json(app);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -56,7 +56,7 @@ router.delete('/:id', async (req, res) => {
         const app = await App.findByIdAndDelete({_id: req.params.id});
         return res.status(200).json(app);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 

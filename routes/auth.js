@@ -17,13 +17,13 @@ router.post('/token', async (req, res) => {
     try {
         const user = await User.findOne({email: req.body.email});
         if(!user) {
-            return res.status(400).send('User is not exist');
+            return res.status(400).json({status:"error", message: 'User is not exist'});
         }
 
         const app = await App.findById({_id: req.body.appId});
 
         if(!app) {
-            return res.status(400).send('App is not exist');
+            return res.status(400).json({status:"error", message: 'App is not exist'});
         }
 
         const token = jwt.sign({userId: user._id, appId: app._id}, process.env.TOKEN_SECRET);
@@ -42,13 +42,13 @@ ${token}
             if (error) {
                 console.log(error);
             } else {
-                console.log('email was sended')
+                console.log('email was sended');
             }
         });
 
-        return res.status(200).json({status:"ok"});
+        return res.status(200).json({status:"ok", message: 'Email was sended'});
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -58,28 +58,28 @@ router.get('/verification/:token', async (req, res) => {
     try {
         verified = jwt.verify(req.params.token, process.env.TOKEN_SECRET);
         if(!verified) {
-            return res.status(400).send('Invalid token');
+            return res.status(400).json({status:"error", message: 'Invalid token'});
         }
     } catch(err) {
-        return res.status(400).send(err.message);
+        return res.status(400).json({status:"error", message: err.message});
     }
 
     try {
         const user = await User.findById({_id: verified.userId});
 
         if(!user) {
-            return res.status(400).send('Invalid token');
+            return res.status(400).json({status:"error", message: 'Invalid token'});
         }
 
         const app = await App.findById({_id: verified.appId});
 
         if(!app) {
-            return res.status(400).send('Invalid token');
+            return res.status(400).json({status:"error", message: 'Invalid token'});
         }
 
-        return res.status(200).json({status:"ok"});
+        return res.status(200).json({status:"ok", message: 'Token is valid'});
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 

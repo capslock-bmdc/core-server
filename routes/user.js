@@ -16,7 +16,7 @@ router.post('/', adminOnly, async (req, res) => {
     const tzExist = await User.findOne({tz: req.body.tz});
 
     if(tzExist) {
-        return res.status(400).send('TZ already exist');
+        return res.status(400).json({status:"error", message: 'TZ already exist'});
     }
 
     const user = new User({
@@ -33,7 +33,7 @@ router.post('/', adminOnly, async (req, res) => {
         const token = jwt.sign({userId: user._id}, process.env.TOKEN_SECRET);
         return res.status(200).json({user: savedUser});
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
         const user = await User.findById(req.params.id);
         return res.status(200).json(user);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -59,7 +59,7 @@ router.put('/:id', async (req, res) => {
         const user = await User.findByIdAndUpdate({_id: req.params.id}, updatedUser, {new: true});
         return res.status(200).json(user);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
@@ -68,7 +68,7 @@ router.delete('/:id', async (req, res) => {
         const user = await User.findByIdAndDelete({_id: req.params.id});
         return res.status(200).json(user);
     } catch(err) {
-        return res.status(400).send(err);
+        return res.status(400).json({status:"error", message: err});
     }
 });
 
