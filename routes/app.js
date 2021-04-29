@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
     return res.json(apps);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', userOnly, async (req, res) => {
     const nameExist = await App.findOne({name: req.body.name});
 
     if(nameExist) {
@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', userOnly, async (req, res) => {
     try {
         const app = await App.findById(req.params.id);
         return res.status(200).json(app);
@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', userOnly, async (req, res) => {
     const updatedApp = {
         name: req.body.name,
         admins: req.body.admins,
@@ -51,7 +51,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', userOnly, async (req, res) => {
     try {
         const app = await App.findByIdAndDelete({_id: req.params.id});
         return res.status(200).json(app);

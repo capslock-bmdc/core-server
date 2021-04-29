@@ -46,7 +46,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', adminOnly, async (req, res) => {
     const updatedUser = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -63,7 +63,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', adminOnly, async (req, res) => {
     try {
         const user = await User.findByIdAndDelete({_id: req.params.id});
         return res.status(200).json(user);
