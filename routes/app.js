@@ -32,14 +32,36 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/:appId', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const app = await App.findById(req.params.appId);
+        const app = await App.findById(req.params.id);
         return res.status(200).json(app);
     } catch(err) {
         return res.status(400).send(err);
     }
 });
 
+router.put('/:id', async (req, res) => {
+    const updatedApp = {
+        name: req.body.name,
+        admins: req.body.admins,
+    };
+
+    try {
+        const app = await App.findByIdAndUpdate({_id: req.params.id}, updatedApp, {new: true});
+        return res.status(200).json(app);
+    } catch(err) {
+        return res.status(400).send(err);
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const app = await App.findByIdAndDelete({_id: req.params.id});
+        return res.status(200).json(app);
+    } catch(err) {
+        return res.status(400).send(err);
+    }
+});
 
 module.exports = router;

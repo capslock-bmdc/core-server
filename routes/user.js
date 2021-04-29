@@ -20,7 +20,8 @@ router.post('/', async (req, res) => {
     }
 
     const user = new User({
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
         tz: req.body.tz,
         phone: req.body.phone
@@ -36,9 +37,35 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/:userId', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.params.id);
+        return res.status(200).json(user);
+    } catch(err) {
+        return res.status(400).send(err);
+    }
+});
+
+router.put('/:id', async (req, res) => {
+    const updatedUser = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        tz: req.body.tz,
+        phone: req.body.phone
+    };
+
+    try {
+        const user = await User.findByIdAndUpdate({_id: req.params.id}, updatedUser, {new: true});
+        return res.status(200).json(user);
+    } catch(err) {
+        return res.status(400).send(err);
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete({_id: req.params.id});
         return res.status(200).json(user);
     } catch(err) {
         return res.status(400).send(err);
