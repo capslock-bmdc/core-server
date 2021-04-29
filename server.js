@@ -15,8 +15,7 @@ const userParser = require('./middlewares/user-parser');
 const indexRouter = require('./routes/index.js');
 const userRouter = require('./routes/user.js');
 const appRouter = require('./routes/app.js');
-const loginRouter = require('./routes/login.js');
-const authRouter = require('./routes/auth/auth.js');
+const authRouter = require('./routes/auth.js');
 
 /* Constant Variables */
 const PORT = process.env.PORT || 5000;
@@ -53,7 +52,6 @@ db.once('open', () => {console.log('Mongoose is connected');});
 app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/apps', appRouter);
-app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 
 

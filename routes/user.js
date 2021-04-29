@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const App = require('../models/App');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const isAdmin = require('./auth/isAdmin');
-const adminOnly = require('./auth/adminOnly');
-const ownerOnly = require('./auth/ownerOnly');
+const nodemailer = require('nodemailer');
+const adminOnly = require('../middlewares/adminOnly');
+const userOnly = require('../middlewares/userOnly');
 
 router.get('/', async (req, res) => {
     const users = await User.find();
     return res.json(users);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', adminOnly, async (req, res) => {
     const tzExist = await User.findOne({tz: req.body.tz});
 
     if(tzExist) {
@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
         const savedUser = await user.save();
         //Create and assign a jwt token
         const token = jwt.sign({userId: user._id}, process.env.TOKEN_SECRET);
-        return res.status(200).json({token, user: savedUser});
+        return res.status(200).json({user: savedUser});
     } catch(err) {
         return res.status(400).send(err);
     }
@@ -71,6 +71,5 @@ router.delete('/:id', async (req, res) => {
         return res.status(400).send(err);
     }
 });
-
 
 module.exports = router;

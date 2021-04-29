@@ -3,10 +3,6 @@ const router = express.Router();
 const User = require('../models/User');
 const App = require('../models/App');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const isAdmin = require('./auth/isAdmin');
-const adminOnly = require('./auth/adminOnly');
-const ownerOnly = require('./auth/ownerOnly');
 
 router.get('/', async (req, res) => {
     const apps = await Apps.find();
