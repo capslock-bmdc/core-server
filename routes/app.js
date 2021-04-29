@@ -3,6 +3,8 @@ const router = express.Router();
 const User = require('../models/User');
 const App = require('../models/App');
 const jwt = require('jsonwebtoken');
+const adminOnly = require('../middlewares/adminOnly');
+const userOnly = require('../middlewares/userOnly');
 
 router.get('/', async (req, res) => {
     const apps = await Apps.find();
