@@ -8,8 +8,9 @@ const appSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User' 
     }],
-    customConfig: {
+    data: {
         type: String,
+        default: null
     },
     createdAt: {
         type: Date,

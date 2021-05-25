@@ -20,7 +20,7 @@ router.post('/token', async (req, res) => {
             return res.status(400).json({status:"error", message: 'User is not exist'});
         }
 
-        const app = await App.findById({_id: req.body.appId});
+        const app = await App.findOne({name: req.body.app});
 
         if(!app) {
             return res.status(400).json({status:"error", message: 'App is not exist'});
@@ -34,6 +34,7 @@ router.post('/token', async (req, res) => {
             subject: `קוד אימות לאפליקציה ${app.name}`,
             text: `שלום ${user.firstName} ${user.lastName},
 קוד האימות שלך הוא:
+
 ${token}
 `
         };
@@ -57,6 +58,7 @@ router.get('/verification/:token', async (req, res) => {
 
     try {
         verified = jwt.verify(req.params.token, process.env.TOKEN_SECRET);
+
         if(!verified) {
             return res.status(400).json({status:"error", message: 'Invalid token'});
         }
@@ -77,7 +79,7 @@ router.get('/verification/:token', async (req, res) => {
             return res.status(400).json({status:"error", message: 'Invalid token'});
         }
 
-        return res.status(200).json({status:"ok", message: 'Token is valid'});
+        return res.status(200).json({status:"ok", message: {userId: user._id}});
     } catch(err) {
         return res.status(400).json({status:"error", message: err});
     }

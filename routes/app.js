@@ -7,8 +7,24 @@ const adminOnly = require('../middlewares/adminOnly');
 const userOnly = require('../middlewares/userOnly');
 
 router.get('/', async (req, res) => {
-    const apps = await Apps.find();
+    const apps = await App.find();
     return res.json(apps);
+});
+
+router.get('/:name', async (req, res) => {
+    const app = await App.findOne({name: req.params.name});
+    return res.json(app);
+});
+
+router.post('/data', async (req, res) => {
+    const updatedApp = await App.findOne({name: req.body.app});
+    if(!updatedApp) {
+        return res.status(400).json({status:"error", message: "App not found"});
+    }
+    updatedApp.data = req.body.data;
+
+    const app = await App.findByIdAndUpdate({_id: updatedApp._id}, updatedApp, {new: true});
+    return res.status(200).json({status:"ok", message: app});
 });
 
 router.post('/', userOnly, async (req, res) => {

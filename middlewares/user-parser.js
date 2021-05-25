@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const App = require('../models/App');
 
 module.exports = async function (req,res,next) {
     const token = req.headers.authorization?.split(" ")[1];
@@ -18,8 +19,12 @@ module.exports = async function (req,res,next) {
     try {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET);
         try {
-            user = await User.findOne({_id: verified.userId});
+            let user = await User.findById({_id: verified.userId});
             req.user = user;
+
+            let app = await App.findById({_id: verified.appId});
+            req.app = app;
+
             req.user.verified = true;
         } catch(err) {
             console.log(err);
