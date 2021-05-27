@@ -23,9 +23,9 @@ router.post('/data', async (req, res) => {
     }
 
     if (typeof req.body.data === 'string') {
-        updatedApp[app.name] = req.body.data;
+        updatedApp.data = req.body.data;
     } else {
-        updatedApp[app.name] = JSON.stringify(req.body.data);
+        updatedApp.data = JSON.stringify(req.body.data);
     }
 
     const app = await App.findByIdAndUpdate({_id: updatedApp._id}, updatedApp, {new: true});
