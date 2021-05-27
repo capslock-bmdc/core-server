@@ -86,8 +86,12 @@ router.post('/data', async (req, res) => {
         if(!app) {
             return res.status(400).json({status:"error", message: "App not found"});
         }
-
-        updatedUser[app.name] = req.body.data;
+        
+        if (typeof req.body.data === 'string') {
+            updatedUser[app.name] = req.body.data;
+        } else {
+            updatedUser[app.name] = JSON.stringify(req.body.data);
+        }
 
         const user = await User.findByIdAndUpdate({_id: updatedUser._id}, updatedUser, {new: true});
         return res.status(200).json(user);

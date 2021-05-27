@@ -16,6 +16,7 @@ let transporter = nodemailer.createTransport({
 router.post('/token', async (req, res) => {
     try {
         const user = await User.findOne({email: req.body.email});
+
         if(!user) {
             return res.status(400).json({status:"error", message: 'User is not exist'});
         }
