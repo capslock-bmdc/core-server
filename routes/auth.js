@@ -44,11 +44,11 @@ ${token}
             if (error) {
                 console.log(error);
             } else {
-                console.log('email was sended');
+                console.log('email was sent');
             }
         });
 
-        return res.status(200).json({status:"ok", message: 'Email was sended'});
+        return res.status(200).json({status:"ok", message: 'Email was sent'});
     } catch(err) {
         return res.status(400).json({status:"error", message: err});
     }
